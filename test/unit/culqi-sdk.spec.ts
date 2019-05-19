@@ -3,8 +3,8 @@
 import * as _ from 'lodash';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as mocks from './resources/mocks';
-import { CulqiSDK } from '../src/culqi-sdk';
+import * as mocks from '../resources/mocks';
+import { CulqiSDK } from '../../src/culqi-sdk';
 
 chai.should();
 chai.use(chaiAsPromised);

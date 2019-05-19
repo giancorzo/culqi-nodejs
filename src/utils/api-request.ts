@@ -1,5 +1,5 @@
 import { CulqiSDK } from "../culqi-sdk";
-import Axios from 'axios';
+import * as request from 'request';
 
 export class APIRequest {
 
@@ -15,9 +15,6 @@ export class APIRequest {
     this.publicHeader = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + this.appInternal.options.publicKey,
-      'X-API-VERSION': '2',
-      'X-API-KEY': this.appInternal.options.publicKey,
-      'X-CULQI-ENV': 'live'
     };
 
     this.privateHeader = {
@@ -26,21 +23,45 @@ export class APIRequest {
     };
   }
 
-  public async post(service: string, params: Object, publicHeader: boolean = true) {
-
-    try {
-      const res = await Axios.post(this.baseUrl_ + service, params, {
-        headers: publicHeader ? this.publicHeader : this.privateHeader
+  private apiCall(url: string, method: string, headers: {}, body: {}) {
+    return new Promise((resolve, reject) => {
+      return request({
+        url,
+        method,
+        headers,
+        json: true,
+        body
+      }, (error: any, response: request.Response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response.body);
       });
+    });
+  }
 
-      // const res = await superAgent.post(service)
-      //   .use(prefix)
-      //   .set('Content-Type','application/json')
-      //   .set('X-API-KEY','123Prueba')
-      //   .set('Authorization', publicHeader ? this.publicHeader : this.privateHeader)
-      //   .send(params);
-      return res;
+  public post(service: string, params: Object, publicHeader: boolean = true) {
+    try {
+      return this.apiCall(
+        this.baseUrl_ + service,
+        'POST',
+        publicHeader ? this.publicHeader : this.privateHeader,
+        params
+      )
+    } catch (e) {
+      console.log(e);
+    }
+    return null;
+  }
 
+  public get(service: string, publicHeader: boolean = true) {
+    try {
+      return this.apiCall(
+        this.baseUrl_ + service,
+        'GET',
+        publicHeader ? this.publicHeader : this.privateHeader,
+        null
+      );
     } catch (e) {
       console.log(e);
     }

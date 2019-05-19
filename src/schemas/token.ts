@@ -8,3 +8,16 @@ export const createTokenSchema = Joi.object({
   email: Joi.string().email().min(5).max(50).required(),
   metadata: Joi.object().optional()
 }).required();
+
+export const listTokenSchema = Joi.object({
+  creation_date: Joi.date().timestamp('unix'),
+  creation_date_to: Joi.date().timestamp('unix'),
+  card_brand: Joi.string().valid('Visa','Mastercard','Amex','Diner'),
+  card_type: Joi.string().valid('credito','debito','prepagada'),
+  device_type: Joi.string().valid('escritorio','movil','tablet'),
+  bin: Joi.string(),
+  country_code: Joi.string(),
+  limit: Joi.string(),
+  before: Joi.string(),
+  after: Joi.string()
+});

@@ -5,12 +5,17 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as mocks from '../resources/mocks';
 import { CulqiSDK } from '../../src/culqi-sdk';
+import { mockPost } from '../resources/request-intercepting';
 
 chai.should();
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe('Token Service', () => {
+interface tokenCreateData {
+  object: string;
+}
+
+describe('Token Unit testing', () => {
 
   let culqiSDK: CulqiSDK = null;
 
@@ -40,10 +45,24 @@ describe('Token Service', () => {
     });
 
     it('should call culqiSDK with createToken parameters',() => {
-      // expect(() => {
-      // });
-      const token = culqiSDK.token().create(mocks.validCreateTokenParams);
-      console.log(token);
+      mockPost(200, '/tokens', {
+        data: {
+          "object": "token",
+          "type": "card",
+          "email": "test@test.com",
+          "card_number": "411111******1111",
+          "last_four": "1111",
+          "active": true
+        }
+      });
+
+      culqiSDK
+        .token()
+        .create(mocks.validCreateTokenParams)
+        .then((data: tokenCreateData) => {
+          expect(data.object, 'token');
+        });
+
     });
   });
 

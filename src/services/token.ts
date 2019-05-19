@@ -2,16 +2,28 @@ import { CulqiSDK } from "../culqi-sdk";
 import * as validator from '../utils/validator';
 import { AppErrorCodes, SDKError } from '../utils/error';
 import {APIRequest} from '../utils/api-request';
-import * as snakeCaseKeys from 'snakecase-keys';
-import { createTokenSchema } from '../schemas/token';
+import { createTokenSchema, listTokenSchema } from '../schemas/token';
 import * as Joi from '@hapi/joi';
 
 export interface CreateTokenParams {
-  cardNumber: string;
+  card_number: string;
   cvv: string;
-  expirationMonth: string;
-  expirationYear: string;
+  expiration_month: string;
+  expiration_year: string;
   email: string;
+}
+
+export interface ListTokenParams {
+  creation_date: string;
+  creation_date_to: string;
+  card_brand: string; // Visa, Mastercard, Amex, Diner
+  card_type: string; // credito, debito, prepagada
+  device_type: string; // escritorio, movil, tablet
+  bin: string;
+  country_code: string;
+  limit: string; // 1 - 100
+  before: string;
+  after: string;
 }
 
 export class TokenService {
@@ -45,7 +57,31 @@ export class TokenService {
       });
     }
 
-    this.apiRequest.post('/tokens', params);
+    return this.apiRequest.post('/tokens', params);
+  }
+
+  public get(id: string) {
+
+    if (!validator.isNonEmptyString(id)) {
+      throw new SDKError({
+        code: AppErrorCodes.INVALID_ARGUMENTS,
+        message: 'Invalid Arguments'
+      });
+    }
+
+    return this.apiRequest.get(`/tokens/${id}`,false);
+  }
+
+  public list(params: ListTokenParams) {
+
+    if (Joi.validate(params, listTokenSchema).error !== null) {
+      throw new SDKError({
+        code: AppErrorCodes.INVALID_ARGUMENTS,
+        message: 'Invalid Arguments'
+      });
+    }
+
+    return this.apiRequest.get('/tokens',false);
   }
 
   get basePath(): string {

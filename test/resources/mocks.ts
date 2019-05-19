@@ -4,7 +4,7 @@ import {CulqiSDKOptions } from '../../src/culqi-sdk';
 import { CreateTokenParams } from '../../src/services/token';
 
 export const sdkOptions: CulqiSDKOptions = {
-  publicKey: 'pk_test_LsTFGejzCGVEWOwO',
+  publicKey: 'pk_test_LsRBKejzCOEEWOwO',
   secretKey: 'sk_test_uRT4E2S2mH7FLr2p'
 };
 
@@ -14,7 +14,7 @@ export const publicKeyEmptySdkOptions: CulqiSDKOptions = {
 }
 
 export const secretKeyEmptySdkOptions: CulqiSDKOptions = {
-  publicKey: 'pk_test_LsTFGejzCGVEWOwO',
+  publicKey: 'pk_test_LsRBKejzCOEEWOwO',
   secretKey: ''
 }
 
@@ -23,7 +23,7 @@ export const validCreateTokenParams = {
   cvv: '123',
   expiration_month: '09',
   expiration_year: '2020',
-  email: 'richard@piedpiper.com'
+  email: 'gian.corzo@gmail.com'
 }
 
 export const wrongCardNumberTokenParams = {
@@ -31,7 +31,7 @@ export const wrongCardNumberTokenParams = {
   cvv: '123',
   expiration_month: '09',
   expiration_year: '2020',
-  email: 'richard@piedpiper.com'
+  email: 'gian.corzo@gmail.com'
 }
 
 export const wrongCVVTokenParams = {
@@ -39,5 +39,5 @@ export const wrongCVVTokenParams = {
   cvv: 123,
   expiration_month: '09',
   expiration_year: '2020',
-  email: 'richard@piedpiper.com'
+  email: 'gian.corzo@gmail.com'
 }
